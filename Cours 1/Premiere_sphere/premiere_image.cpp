@@ -9,7 +9,6 @@
 
 #define M_PI 3.14159265359
 
-
 class Vector{
     public:
         explicit Vector(double x=0, double y=0, double z=0) {
