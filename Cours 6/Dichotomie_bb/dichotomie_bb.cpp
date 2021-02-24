@@ -447,7 +447,8 @@ public:
                         has_inter = true;
                         if (localt < t){
                             t = localt;
-                            normal = -N.get_normalized();
+/*                            normal = -N.get_normalized();
+*/                          normal = alpha*normals[indices[i].ni] + beta*normals[indices[i].nj] + gamma*normals[indices[i].nk];
                             P = r.C + t * r.u;
                             }
                         }
@@ -456,6 +457,7 @@ public:
             }
 
         }
+        normal = normal.get_normalized();
         return has_inter;
         };
 
@@ -630,7 +632,7 @@ public:
 int main() {
     int W = 1000;
     int H = 1000;
-    int nbrays = 200;
+    int nbrays = 300;
 
     Scene scene;
     Vector C(0, 0, 55);
@@ -656,11 +658,18 @@ int main() {
         m.vertices[i][0] /= 2;
         m.vertices[i][1] /= 2;
         m.vertices[i][2] /= 2;
+        double old_vertices = m.vertices[i][0];
         m.vertices[i][0] = cos(theta)*m.vertices[i][0] - sin(theta)*m.vertices[i][1];
-        m.vertices[i][1] = sin(theta)*m.vertices[i][0] + cos(theta)*m.vertices[i][1];
+        m.vertices[i][1] = sin(theta)*old_vertices + cos(theta)*m.vertices[i][1];
         m.vertices[i][1] += 20;
         m.vertices[i][2] -= 3;
         std::swap(m.vertices[i][1], m.vertices[i][2]);
+    }
+    for(int i=0; i<m.normals.size(); i++){
+        double old_normals = m.normals[i][0];
+        m.normals[i][0] = cos(theta)*m.normals[i][0] - sin(theta)*m.normals[i][1];
+        m.normals[i][1] = sin(theta)*old_normals + cos(theta)*m.normals[i][1];
+        std::swap(m.normals[i][1], m.normals[i][2]);
     }
 
     m.buildBVH(m.BVH, 0, m.indices.size());
@@ -683,8 +692,8 @@ int main() {
     std::vector<unsigned char> image(W*H * 3, 0);
 #pragma omp parallel for schedule(dynamic, 1)
     for (int i = 0; i < H; i++) {
+        std::cout << i << '\n';
         for (int j = 0; j < W; j++) {
-
             Vector color(0,0,0);
             for (int k=0; k<nbrays; k++){
                 double u1 = uniform(engine);
