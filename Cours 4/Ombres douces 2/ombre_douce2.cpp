@@ -12,6 +12,7 @@
 #include <algorithm>
 #include <complex>
 #include <random>
+#include <iostream>
 
 static std::default_random_engine engine(10); // random seed = 10
 static std::uniform_real_distribution<double> uniform(0, 1);
@@ -261,9 +262,9 @@ public:
 };
 
 int main() {
-    int W = 1000;
-    int H = 1000;
-    int nbrays = 500;
+    int W = 512;
+    int H = 512;
+    int nbrays = 200;
 
     Scene scene;
     Vector C(0, 0, 55);
@@ -296,6 +297,7 @@ int main() {
     std::vector<unsigned char> image(W*H * 3, 0);
 #pragma omp parallel for schedule(dynamic, 1)
     for (int i = 0; i < H; i++) {
+        std::cout << i << '\n';
         for (int j = 0; j < W; j++) {
 
             Vector color(0,0,0);

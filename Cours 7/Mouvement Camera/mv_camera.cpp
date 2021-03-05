@@ -461,13 +461,12 @@ public:
                             if (uvx < 0) uvx += W;
                             if (uvy < 0) uvy += H;
                             uvy = H - uvy - 1;
-                            color = Vector(textures[indices[i].group][(uvy*H + uvx)*3]/255.,
-                                textures[indices[i].group][(uvy*H + uvx)*3 + 1]/255.,
-                                textures[indices[i].group][(uvy*H + uvx)*3 + 2]/255.);
+                            color = Vector(std::pow(textures[indices[i].group][(uvy*H + uvx)*3]/255., 2.2),
+                                std::pow(textures[indices[i].group][(uvy*H + uvx)*3 + 1]/255., 2.2),
+                                std::pow(textures[indices[i].group][(uvy*H + uvx)*3 + 2]/255., 2.2));
                             }
                         }
                     }
-
             }
 
         }

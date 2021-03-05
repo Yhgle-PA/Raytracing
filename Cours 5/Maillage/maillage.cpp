@@ -533,12 +533,18 @@ int main() {
     Sphere Splafond(Vector(0, 1000, 0), 940, Vector(0., 0., 1.));
     TriangleMesh m(Vector(1., 1., 1.));
     m.readOBJ("cat_object.obj");
+    double angle_rot = 130.;
+    double theta = angle_rot/360.*2*M_PI;
     for(int i=0; i<m.vertices.size(); i++){
         m.vertices[i][2] -= 15;
         m.vertices[i][0] /= 2;
         m.vertices[i][1] /= 2;
         m.vertices[i][2] /= 2;
-        m.vertices[i][1] += 15;
+        double old_vertices = m.vertices[i][0];
+        m.vertices[i][0] = cos(theta)*m.vertices[i][0] - sin(theta)*m.vertices[i][1];
+        m.vertices[i][1] = sin(theta)*old_vertices + cos(theta)*m.vertices[i][1];
+        m.vertices[i][1] += 20;
+        m.vertices[i][2] -= 3;
         std::swap(m.vertices[i][1], m.vertices[i][2]);
     }
     scene.objects.push_back(&Lumiere);
@@ -560,6 +566,7 @@ int main() {
     std::vector<unsigned char> image(W*H * 3, 0);
 #pragma omp parallel for schedule(dynamic, 1)
     for (int i = 0; i < H; i++) {
+        std::cout << i << '\n';
         for (int j = 0; j < W; j++) {
 
             Vector color(0,0,0);

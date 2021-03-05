@@ -189,8 +189,8 @@ public:
 };
 
 int main() {
-    int W = 1000;
-    int H = 1000;
+    int W = 512;
+    int H = 512;
 
     Scene scene;
     Vector C(0, 0, 55);
